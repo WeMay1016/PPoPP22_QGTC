@@ -32,11 +32,18 @@ parser.add_argument("--n-hidden", type=int, default=16, help="number of hidden g
 parser.add_argument("--n-classes", type=int, default=10, help="number of classes")
 parser.add_argument("--n-layers", type=int, default=1, help="number of hidden gcn layers")
 
-parser.add_argument("--use-pp", action='store_true',help="whether to use precomputation")
+""" parser.add_argument("--use-pp", action='store_true',help="whether to use precomputation")
 parser.add_argument("--regular", action='store_true',help="whether to use DGL")
 parser.add_argument("--run_GIN", action='store_true',help="whether to run GIN model")
 parser.add_argument("--use_QGTC", action='store_true',help="whether to use QGTC")
-parser.add_argument("--zerotile_jump", action='store_true',help="whether to profile zero-tile jumping")
+parser.add_argument("--zerotile_jump", action='store_true',help="whether to profile zero-tile jumping") """
+parser.add_argument("--use-pp", type=bool, default = False, help="whether to use precomputation")
+parser.add_argument("--regular", type=bool, default = True, help="whether to use DGL")
+parser.add_argument("--run_GIN", type=bool, default = False, help="whether to run GIN model")
+parser.add_argument("--use_QGTC", type=bool, default = False, help="whether to use QGTC")
+parser.add_argument("--zerotile_jump", type=bool, default = False, help="whether to profile zero-tile jumping")
+
+parser.set_defaults(dataset = 'ppi')
 
 args = parser.parse_args()
 print(args)
