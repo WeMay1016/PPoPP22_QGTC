@@ -7,7 +7,7 @@ import torch
 from partition_utils import *
 import sys
 from scipy.sparse import coo_matrix
-import QGTC
+#import QGTC
 
 class ClusterTensor(torch.nn.Module):
     def __init__(self, bit_A, bit_X):
@@ -69,7 +69,7 @@ class ClusterIter(object):
         self.get_fn = get_subgraph
         self.bit_width = bit_width
 
-        if not self.regular:
+        """ if not self.regular:
             self.cTensor_li = []
             self.cluster_param_li = []
             # preprocess all subgraphs.
@@ -103,7 +103,7 @@ class ClusterIter(object):
                              
                 cTensor = ClusterTensor(bit_A.cpu(), bit_X.cpu())
                 self.cluster_param_li.append((A_size_0, A_size_1, X_size_0, X_size_1))
-                self.cTensor_li.append(cTensor)
+                self.cTensor_li.append(cTensor) """
 
     def precalc(self, g):
         norm = self.get_norm(g)
