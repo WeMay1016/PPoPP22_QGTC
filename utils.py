@@ -67,13 +67,13 @@ def load_data(args):
         data = DataType(g=dataset[0], num_classes=dataset.num_classes)
         return data
     train_dataset = PPIDataset('train')
-    train_graph = dgl.batch([train_dataset[i] for i in range(len(train_dataset))], edge_attrs=None, node_attrs=None)
+    train_graph = dgl.batch([train_dataset[i] for i in range(len(train_dataset))])
     val_dataset = PPIDataset('valid')
-    val_graph = dgl.batch([val_dataset[i] for i in range(len(val_dataset))], edge_attrs=None, node_attrs=None)
+    val_graph = dgl.batch([val_dataset[i] for i in range(len(val_dataset))])
     test_dataset = PPIDataset('test')
-    test_graph = dgl.batch([test_dataset[i] for i in range(len(test_dataset))], edge_attrs=None, node_attrs=None)
+    test_graph = dgl.batch([test_dataset[i] for i in range(len(test_dataset))])
     G = dgl.batch(
-        [train_graph, val_graph, test_graph], edge_attrs=None, node_attrs=None)
+        [train_graph, val_graph, test_graph])
 
     train_nodes_num = train_graph.number_of_nodes()
     test_nodes_num = test_graph.number_of_nodes()
