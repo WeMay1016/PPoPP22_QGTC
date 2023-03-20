@@ -6,7 +6,7 @@ import numpy as np
 
 import torch
 from torch import nn, optim
-from ogb.nodeproppred import DglNodePropPredDataset
+#from ogb.nodeproppred import DglNodePropPredDataset
 from dgl.data import register_data_args
 
 from modules import *
@@ -84,12 +84,13 @@ def main(args):
         test_mask = g.ndata['test_mask']
         labels = g.ndata['label']
     elif args.dataset in ['ogbn-arxiv', 'ogbn-products']:
-        data = DglNodePropPredDataset(name=args.dataset) #'ogbn-proteins'
+        pass
+        """ data = DglNodePropPredDataset(name=args.dataset) #'ogbn-proteins'
         split_idx = data.get_idx_split()
         g, labels = data[0]
         train_mask = split_idx['train']
         val_mask = split_idx['valid']
-        test_mask = split_idx['test']
+        test_mask = split_idx['test'] """
     else:
         path = osp.join("./qgtc_graphs", args.dataset+".npz")
         data = QGTC_dataset(path, args.dim, args.n_classes)
