@@ -112,6 +112,7 @@ def main(args):
 
     train_nid = np.nonzero(train_mask.data.numpy())[0].astype(np.int64)
     in_feats = g.ndata['feat'].shape[1]
+    print(g.shape, g.ndata['feat'].shape)
     n_classes = data.num_classes
     # metis only support int64 graph
     g = g.long()
