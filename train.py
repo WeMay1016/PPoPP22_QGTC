@@ -146,7 +146,7 @@ def main(args):
     criterion = nn.CrossEntropyLoss().cuda()
     optimizer = optim.Adam(model.parameters(), 
                         lr=args.lr, 
-                        weight_decay=1e-4)
+                        weight_decay=args.weight_decay)
     
     
     loss_history = []
