@@ -160,7 +160,7 @@ def main(args):
             cluster = cluster.to(torch.cuda.current_device())
             logits = model(cluster, cluster.ndata['feat'])
             train_y = cluster.ndata['label']
-            #print(logits.shape, train_y.shape)
+            print(logits.shape, train_y.shape)
             loss = criterion(logits, train_y)    # 计算损失值
             
             total_loss += loss.item()
