@@ -22,7 +22,7 @@ parser = argparse.ArgumentParser()
 register_data_args(parser)
 parser.add_argument("--gpu", type=int, default=0, help="gpu")
 
-parser.add_argument("--n-epochs", type=int, default=20, help="number of training epochs")
+parser.add_argument("--n-epochs", type=int, default=1, help="number of training epochs")
 parser.add_argument("--batch-size", type=int, default=20, help="batch size")
 parser.add_argument("--lr", type=float, default=1e-3, help="learning rate")
 parser.add_argument("--psize", type=int, default=1500, help="number of partitions")
@@ -143,12 +143,11 @@ def main(args):
         total_loss = 0
         count = 0
         for j, cluster in enumerate(cluster_iterator):
-            #print(cluster.shape)
-            print(cluster.ndata['label'])
+            #print(cluster.ndata['label'])
             cluster = cluster.to(torch.cuda.current_device())
             logits = model(cluster)
             #train_logits = logits[train_mask]
-            train_y = labels[train_mask]
+            train_y = cluster.ndata['label']
             loss = criterion(logits, train_y)    # 计算损失值
             
             total_loss += loss.item()
