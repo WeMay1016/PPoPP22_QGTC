@@ -38,8 +38,8 @@ class GraphSAGE(nn.Module):
         # output layer
         self.layers.append(GraphSAGELayer(n_hidden, n_classes))
 
-    def forward(self, g):
-        h = g.ndata['feat']
+    def forward(self, g, h):
+        #h = g.ndata['feat']
         for layer in self.layers:
             h = layer(g, h)
         return h
@@ -92,8 +92,8 @@ class GIN(nn.Module):
         self.ginlayers.append(GINConv(ApplyNodeFunc(nn.Linear(hidden_dim, output_dim)), 
                                       "sum", init_eps=0, learn_eps=False))
 
-    def forward(self, g):
-        h = g.ndata['feat']
+    def forward(self, g, h):
+        #h = g.ndata['feat']
         for i in range(self.num_layers):
             h = self.ginlayers[i](g, h)
         return h

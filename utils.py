@@ -41,20 +41,20 @@ def save_log_dir(args):
     return log_dir
 
 def calc_f1(y_true, y_pred, multitask):
-    print(y_true[:5], y_pred[:5])
+    #print(y_true[:5], y_pred[:5])
     if multitask:
         y_pred[y_pred > 0] = 1
         y_pred[y_pred <= 0] = 0
     else:
         y_pred = np.argmax(y_pred, axis=1)
-    print(y_true[:5], y_pred[:5])
+    #print(y_true[:5], y_pred[:5])
     return f1_score(y_true, y_pred, average="micro"), \
         f1_score(y_true, y_pred, average="macro")
 
 def evaluate(model, g, labels, mask, multitask=False):
     model.eval()
     with torch.no_grad():
-        logits = model(g)
+        logits = model(g, g.ndata['feat'])
         logits = logits[mask]
         labels = labels[mask]
         f1_mic, f1_mac = calc_f1(labels.cpu().numpy(),
