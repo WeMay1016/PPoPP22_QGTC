@@ -45,6 +45,9 @@ parser.add_argument("--run_GIN", type=bool, default = False, help="whether to ru
 parser.add_argument("--use_QGTC", type=bool, default = False, help="whether to use QGTC")
 parser.add_argument("--zerotile_jump", type=bool, default = False, help="whether to profile zero-tile jumping")
 
+parser.add_argument("--step-size", type=int, default=10, help="schedule step")
+parser.add_argument("--gamma", type=float, default=0.8, help="schedule gamma")
+
 parser.set_defaults(dataset = 'ppi')
 
 args = parser.parse_args()
@@ -148,6 +151,7 @@ def main(args):
     optimizer = optim.Adam(model.parameters(), 
                         lr=args.lr, 
                         weight_decay=args.weight_decay)
+    StepLR = torch.optim.lr_scheduler.StepLR(optimizer, step_size=args.step_size, gamma=args.gamma)
     
     
     loss_history = []
@@ -173,6 +177,7 @@ def main(args):
             optimizer.zero_grad()
             loss.backward()     # 反向传播计算参数的梯度
             optimizer.step()    # 使用优化方法进行梯度更新
+            StepLR.step()
         
         #cluster = cluster.cpu()
             
