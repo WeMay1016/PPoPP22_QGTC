@@ -90,6 +90,10 @@ def main(args):
         val_mask = g.ndata['val_mask']
         test_mask = g.ndata['test_mask']
         labels = g.ndata['label']
+        if args.dataset == 'ppi':
+            multitask = True
+        else:
+            multitask = False
     elif args.dataset in ['ogbn-arxiv', 'ogbn-products']:
         pass
         """ data = DglNodePropPredDataset(name=args.dataset) #'ogbn-proteins'
@@ -159,8 +163,8 @@ def main(args):
         
         #cluster = cluster.cpu()
             
-        train_F1_mic, train_F1_mac = evaluate(model, g, labels, train_mask, True)
-        val_F1_mic, val_F1_mac = evaluate(model, g, labels, val_mask, True)
+        train_F1_mic, train_F1_mac = evaluate(model, g, labels, train_mask, multitask)
+        val_F1_mic, val_F1_mac = evaluate(model, g, labels, val_mask, multitask)
         # 记录训练过程中损失值和F1_score的变化，用于画图
         avg_loss = total_loss / count
         loss_history.append(avg_loss)
