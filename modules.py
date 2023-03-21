@@ -25,6 +25,7 @@ class GraphSAGELayer(nn.Module):
 
 class GraphSAGE(nn.Module):
     def __init__(self,
+                 multitask,
                  in_feats,
                  n_hidden,
                  n_classes,
@@ -37,6 +38,9 @@ class GraphSAGE(nn.Module):
         self.layers.append(GraphSAGELayer(n_hidden, n_hidden))
         # output layer
         self.layers.append(GraphSAGELayer(n_hidden, n_classes))
+        # classifier
+        if multitask == False:
+            self.layers.append(torch.nn.Softmax())
 
     def forward(self, g, h):
         #h = g.ndata['feat']
@@ -64,7 +68,8 @@ class ApplyNodeFunc(nn.Module):
 
 class GIN(nn.Module):
     """GIN model"""
-    def __init__(self, 
+    def __init__(self,
+                multitask, 
                 input_dim, 
                 hidden_dim, 
                 output_dim, 
@@ -91,6 +96,9 @@ class GIN(nn.Module):
         # Output Layer
         self.ginlayers.append(GINConv(ApplyNodeFunc(nn.Linear(hidden_dim, output_dim)), 
                                       "sum", init_eps=0, learn_eps=False))
+        # classifier
+        if multitask == False:
+            self.layers.append(torch.nn.Softmax())
 
     def forward(self, g, h):
         #h = g.ndata['feat']

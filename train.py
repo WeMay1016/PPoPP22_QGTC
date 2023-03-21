@@ -135,9 +135,9 @@ def main(args):
     g = g.int().to(args.gpu)
 
     if args.run_GIN:
-        model = GIN(in_feats, args.n_hidden, n_classes)
+        model = GIN(multitask, in_feats, args.n_hidden, n_classes)
     else:
-        model = GraphSAGE(in_feats, args.n_hidden, n_classes, args.n_layers)
+        model = GraphSAGE(multitask, in_feats, args.n_hidden, n_classes, args.n_layers)
 
     model.cuda()
     train_nid = torch.from_numpy(train_nid).cuda()
