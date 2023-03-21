@@ -191,12 +191,20 @@ def main(args):
     print("Avg. Epoch: {:.3f} ms".format((end_time - start_time)*1000/args.n_epochs))
     
     #模型存储
+    path = './trained_model'
+    name = args.dataset + '_'
     if args.run_GIN:
-        name = 'gin'
+        name += 'GIN'
     else:
-        name = 'gcn'
+        name += 'GCN'
+        
+    name += '.pt'
+    torch.save(model, path + name)
+    #
+    
+    #onnx ?
     #Convert_ONNX(model, args.batch_size, in_feats)
-    Convert_ONNX(model, cluster)
+    #Convert_ONNX(model, cluster)
 
 if __name__ == '__main__':
     main(args)
