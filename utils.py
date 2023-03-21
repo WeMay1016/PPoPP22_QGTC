@@ -48,7 +48,7 @@ def calc_f1(y_true, y_pred, multitask):
         acc = None
     else:
         y_pred = np.argmax(y_pred, axis=1)
-        acc = (y_pred == y_true).float().mean()
+        acc = (y_pred == y_true).astype('float32').mean()
     #print(y_true[:5], y_pred[:5])
     return f1_score(y_true, y_pred, average="micro"), \
         f1_score(y_true, y_pred, average="macro"), acc
