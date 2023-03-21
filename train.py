@@ -191,7 +191,7 @@ def main(args):
     print("Avg. Epoch: {:.3f} ms".format((end_time - start_time)*1000/args.n_epochs))
     
     #模型存储
-    path = './trained_model'
+    path = './trained_model/'
     name = args.dataset + '_'
     if args.run_GIN:
         name += 'GIN'
