@@ -143,6 +143,8 @@ def main(args):
         total_loss = 0
         count = 0
         for j, cluster in enumerate(cluster_iterator):
+            #print(cluster.shape)
+            print(cluster.ndata['label'])
             cluster = cluster.to(torch.cuda.current_device())
             logits = model(cluster)
             #train_logits = logits[train_mask]
