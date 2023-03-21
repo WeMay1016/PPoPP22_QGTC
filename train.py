@@ -177,10 +177,10 @@ def main(args):
             optimizer.zero_grad()
             loss.backward()     # 反向传播计算参数的梯度
             optimizer.step()    # 使用优化方法进行梯度更新
-            StepLR.step()
+        
         
         #cluster = cluster.cpu()
-            
+        StepLR.step()    
         train_F1_mic, train_F1_mac, train_acc = evaluate(model, g, labels, train_mask, multitask)
         val_F1_mic, val_F1_mac, val_acc = evaluate(model, g, labels, val_mask, multitask)
         # 记录训练过程中损失值和F1_score的变化，用于画图
