@@ -25,6 +25,7 @@ parser.add_argument("--gpu", type=int, default=0, help="gpu")
 parser.add_argument("--n-epochs", type=int, default=20, help="number of training epochs")
 parser.add_argument("--batch-size", type=int, default=20, help="batch size")
 parser.add_argument("--lr", type=float, default=1e-3, help="learning rate")
+parser.add_argument("--weight-decay", type=float, default=1e-8, help="weight decay")
 parser.add_argument("--psize", type=int, default=1500, help="number of partitions")
 
 parser.add_argument("--dim", type=int, default=10, help="input dimension of each dataset")
