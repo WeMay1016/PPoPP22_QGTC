@@ -41,6 +41,7 @@ def save_log_dir(args):
     return log_dir
 
 def calc_f1(y_true, y_pred, multitask):
+    print(y_true[:5], y_pred[:5])
     if multitask:
         y_pred[y_pred > 0] = 1
         y_pred[y_pred <= 0] = 0
