@@ -163,8 +163,8 @@ def main(args):
             train_y = cluster.ndata['label']
             if multitask == False:
                 train_y = F.one_hot(train_y, num_classes=n_classes).float()
-            print(logits.shape, train_y.shape)
-            print(train_y)
+            #print(logits.shape, train_y.shape)
+            #print(train_y)
             loss = criterion(logits, train_y)    # 计算损失值
             
             total_loss += loss.item()
