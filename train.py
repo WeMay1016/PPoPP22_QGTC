@@ -52,18 +52,26 @@ print(args)
 import torch.onnx 
 
 #Function to Convert to ONNX 
-def Convert_ONNX(model, name, batch_size, input_size): 
+def Convert_ONNX(model, cluster): 
 
     # set the model to inference mode 
     model.eval() 
 
     # Let's create a dummy input tensor  
-    dummy_input = torch.randn(batch_size, input_size, requires_grad=True)  
+    #dummy_input = torch.randn(1, input_size, requires_grad=True)  
+    
+    name = args.dataset + '_'
+    if args.run_GIN:
+        name += 'GIN'
+    else:
+        name += 'GCN'
+        
+    name += '.onnx'
 
     # Export the model   
     torch.onnx.export(model,         # model being run 
-         dummy_input,       # model input (or a tuple for multiple inputs) 
-         name + ".onnx",       # where to save the model  
+         (cluster, cluster.ndata['feat']),       # model input (or a tuple for multiple inputs) 
+         name,       # where to save the model  
          export_params=True,  # store the trained parameter weights inside the model file 
          opset_version=10,    # the ONNX version to export the model to 
          do_constant_folding=True,  # whether to execute constant folding for optimization 
@@ -124,7 +132,6 @@ def main(args):
     val_mask = val_mask.cuda()
     test_mask = test_mask.cuda()
     g = g.int().to(args.gpu)
-    feat_size  = g.ndata['feat'].shape[1]
 
     if args.run_GIN:
         model = GIN(in_feats, args.n_hidden, n_classes)
@@ -170,9 +177,13 @@ def main(args):
         avg_loss = total_loss / count
         loss_history.append(avg_loss)
         val_acc_history.append([val_F1_mic, val_F1_mac])
-        print("Epoch {:03d}: Loss {:.4f}, train_F1_mic {:.4f}, train_F1_mac {:.4f}, train_acc {:.4f}, val_F1_mic {:.4f}, val_F1_mac {:.4f}, val_acc {:.4f}" \
-            .format(epoch, avg_loss, train_F1_mic, train_F1_mac, train_acc, val_F1_mic, val_F1_mac, val_acc))  
-
+        
+        if multitask:
+            print("Epoch {:03d}: Loss {:.4f}, train_F1_mic {:.4f}, train_F1_mac {:.4f}, val_F1_mic {:.4f}, val_F1_mac {:.4f}" \
+                .format(epoch, avg_loss, train_F1_mic, train_F1_mac, val_F1_mic, val_F1_mac))  
+        else:
+            print("Epoch {:03d}: Loss {:.4f}, train_F1_mic {:.4f}, train_F1_mac {:.4f}, train_acc {:.4f}, val_F1_mic {:.4f}, val_F1_mac {:.4f}, val_acc {:.4f}" \
+                .format(epoch, avg_loss, train_F1_mic, train_F1_mac, train_acc, val_F1_mic, val_F1_mac, val_acc))  
         
     torch.cuda.synchronize()
     end_time = time.time()
@@ -183,7 +194,8 @@ def main(args):
         name = 'gin'
     else:
         name = 'gcn'
-    Convert_ONNX(model, name, args.batch_size, (in_feats))
+    #Convert_ONNX(model, args.batch_size, in_feats)
+    Convert_ONNX(model, cluster)
 
 if __name__ == '__main__':
     main(args)
