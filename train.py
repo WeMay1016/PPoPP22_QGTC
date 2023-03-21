@@ -163,14 +163,16 @@ def main(args):
         
         #cluster = cluster.cpu()
             
-        train_F1_mic, train_F1_mac = evaluate(model, g, labels, train_mask, multitask)
-        val_F1_mic, val_F1_mac = evaluate(model, g, labels, val_mask, multitask)
+        train_F1_mic, train_F1_mac, train_acc = evaluate(model, g, labels, train_mask, multitask)
+        val_F1_mic, val_F1_mac, val_acc = evaluate(model, g, labels, val_mask, multitask)
         # 记录训练过程中损失值和F1_score的变化，用于画图
         avg_loss = total_loss / count
         loss_history.append(avg_loss)
         val_acc_history.append([val_F1_mic, val_F1_mac])
-        print("Epoch {:03d}: Loss {:.4f}, train_F1_mic {:.4f}, train_F1_mac {:.4f}, val_F1_mic {:.4f}, val_F1_mac {:.4f}".format(epoch, avg_loss, train_F1_mic, train_F1_mac, val_F1_mic, val_F1_mac))  
+        print("Epoch {:03d}: Loss {:.4f}, train_F1_mic {:.4f}, train_F1_mac {:.4f}, train_acc {:.4f}, val_F1_mic {:.4f}, val_F1_mac {:.4f}, val_acc {:.4f}" \
+            .format(epoch, avg_loss, train_F1_mic, train_F1_mac, train_acc, val_F1_mic, val_F1_mac, val_acc))  
 
+        
     torch.cuda.synchronize()
     end_time = time.time()
     print("Avg. Epoch: {:.3f} ms".format((end_time - start_time)*1000/args.n_epochs))

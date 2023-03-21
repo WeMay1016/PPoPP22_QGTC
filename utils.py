@@ -45,11 +45,13 @@ def calc_f1(y_true, y_pred, multitask):
     if multitask:
         y_pred[y_pred > 0] = 1
         y_pred[y_pred <= 0] = 0
+        acc = None
     else:
         y_pred = np.argmax(y_pred, axis=1)
+        acc = (y_pred == y_true).float().mean()
     #print(y_true[:5], y_pred[:5])
     return f1_score(y_true, y_pred, average="micro"), \
-        f1_score(y_true, y_pred, average="macro")
+        f1_score(y_true, y_pred, average="macro"), acc
 
 def evaluate(model, g, labels, mask, multitask=False):
     model.eval()
@@ -57,9 +59,9 @@ def evaluate(model, g, labels, mask, multitask=False):
         logits = model(g, g.ndata['feat'])
         logits = logits[mask]
         labels = labels[mask]
-        f1_mic, f1_mac = calc_f1(labels.cpu().numpy(),
+        f1_mic, f1_mac, acc = calc_f1(labels.cpu().numpy(),
                                  logits.cpu().numpy(), multitask)
-        return f1_mic, f1_mac
+        return f1_mic, f1_mac, acc
 
 def load_data(args):
     '''Wraps the dgl's load_data utility to handle ppi special case'''
