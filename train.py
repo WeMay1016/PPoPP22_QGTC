@@ -6,6 +6,7 @@ import numpy as np
 
 import torch
 from torch import nn, optim
+import torch.nn.functional as F
 #from ogb.nodeproppred import DglNodePropPredDataset
 from dgl.data import register_data_args
 
@@ -160,6 +161,8 @@ def main(args):
             cluster = cluster.to(torch.cuda.current_device())
             logits = model(cluster, cluster.ndata['feat'])
             train_y = cluster.ndata['label']
+            if multitask == False:
+                train_y = F.one_hot(train_y, num_classes=n_classes)
             print(logits.shape, train_y.shape)
             print(train_y)
             loss = criterion(logits, train_y)    # 计算损失值
