@@ -46,6 +46,7 @@ def calc_f1(y_true, y_pred, multitask):
         y_pred[y_pred <= 0] = 0
     else:
         y_pred = np.argmax(y_pred, axis=1)
+    print(y_true[:5], y_pred[:5])
     return f1_score(y_true, y_pred, average="micro"), \
         f1_score(y_true, y_pred, average="macro")
 
