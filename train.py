@@ -159,8 +159,8 @@ def main(args):
         
         #cluster = cluster.cpu()
             
-        train_F1_mic, train_F1_mac = evaluate(model, g, labels, train_mask)
-        val_F1_mic, val_F1_mac = evaluate(model, g, labels, val_mask)
+        train_F1_mic, train_F1_mac = evaluate(model, g, labels, train_mask, True)
+        val_F1_mic, val_F1_mac = evaluate(model, g, labels, val_mask, True)
         # 记录训练过程中损失值和F1_score的变化，用于画图
         avg_loss = total_loss / count
         loss_history.append(avg_loss)
