@@ -31,6 +31,7 @@ class GraphSAGE(nn.Module):
                  n_classes,
                  n_layers):
         super(GraphSAGE, self).__init__()
+        self.multitask = multitask
         self.layers = nn.ModuleList()
         # input layer
         self.layers.append(GraphSAGELayer(in_feats, n_hidden))
@@ -38,14 +39,16 @@ class GraphSAGE(nn.Module):
         self.layers.append(GraphSAGELayer(n_hidden, n_hidden))
         # output layer
         self.layers.append(GraphSAGELayer(n_hidden, n_classes))
-        # classifier
-        if multitask == False:
-            self.layers.append(torch.nn.Softmax())
+
 
     def forward(self, g, h):
         #h = g.ndata['feat']
         for layer in self.layers:
             h = layer(g, h)
+        
+        # classifier
+        if self.multitask == False:
+            h = F.softmax(h, dim=1)
         return h
         
 ########################
@@ -85,6 +88,7 @@ class GIN(nn.Module):
             The number of classes for prediction
         """
         super(GIN, self).__init__()
+        self.multitask = multitask
         self.num_layers = num_layers
         self.ginlayers = torch.nn.ModuleList()
         # Input Layer
@@ -96,12 +100,14 @@ class GIN(nn.Module):
         # Output Layer
         self.ginlayers.append(GINConv(ApplyNodeFunc(nn.Linear(hidden_dim, output_dim)), 
                                       "sum", init_eps=0, learn_eps=False))
-        # classifier
-        if multitask == False:
-            self.layers.append(torch.nn.Softmax())
 
     def forward(self, g, h):
         #h = g.ndata['feat']
         for i in range(self.num_layers):
             h = self.ginlayers[i](g, h)
+        
+        # classifier
+        if self.multitask == False:
+            h = F.softmax(h, dim=1)
+        
         return h
