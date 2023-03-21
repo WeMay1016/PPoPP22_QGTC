@@ -152,6 +152,7 @@ def main(args):
             logits = model(cluster, cluster.ndata['feat'])
             #train_logits = logits[train_mask]
             train_y = cluster.ndata['label']
+            print(logits.shape, train_y.shape)
             loss = criterion(logits, train_y)    # 计算损失值
             
             total_loss += loss.item()
